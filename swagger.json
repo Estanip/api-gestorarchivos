@@ -1,0 +1,314 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Gestor de archivos",
+        "description": "API para la gestion de archivos",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [{
+        "name": "Gestor Archivos",
+        "description": "API para la gestion de archivos"
+    }],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "tags": ["Authorization"],
+                "summary": "Registro de usuario",
+                "parameters": [{
+                    "name": "user",
+                    "in": "body",
+                    "required": true,
+                    "description": "Creacion de un nuevo usuario",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }],
+                "produces": ["application/json"],
+                "responses": {
+                    "201": {
+                        "description": "Se creo un nuevo usuario"
+                    },
+                    "401": {
+                        "description": "No existe el usuario"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": ["Authorization"],
+                "summary": "Logueo de usuario",
+                "parameters": [{
+                    "name": "user",
+                    "in": "body",
+                    "required": true,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }],
+                "produces": ["application/json"],
+                "responses": {
+                    "201": {
+                        "description": "Se ha logueado el usuario"
+                    },
+                    "401": {
+                        "description": "Error de usuario o contraseña"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/auth/passrecovery": {
+            "post": {
+                "tags": ["Authorization"],
+                "summary": "Recupero de contraseña",
+                "parameters": [{
+                    "name": "user",
+                    "in": "body",
+                    "type": "string",
+                    "required": true,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Email enviado con exito"
+                    },
+                    "401": {
+                        "description": "No existe el usuario"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/auth/{userId}": {
+            "post": {
+                "tags": ["Authorization"],
+                "summary": "Reseteo de contraseña",
+                "parameters": [{
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Se actualizo la contraseña con exito"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/files/downloadfile": {
+            "get": {
+                "tags": ["Files"],
+                "summary": "Descarga de archivo",
+                "parameters": [{
+                    "name": "file",
+                    "in": "query",
+                    "required": true,
+                    "type": "string",
+                    "format": "binary"
+                }],
+                "produces": ["multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "consumes": ["multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "responses": {
+                    "200": {
+                        "description": "Se descargo el archivo con exito"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/files/urlfile": {
+            "get": {
+                "tags": ["Files"],
+                "summary": "Obtener url de un archivo",
+                "parameters": [{
+                    "name": "file",
+                    "in": "query",
+                    "required": true,
+                    "type": "string",
+                    "format": "binary"
+                }],
+                "produces": ["multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "consumes": ["multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "responses": {
+                    "200": {
+                        "description": "Se obtuvo la url del archivo"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/files/renamefile": {
+            "post": {
+                "tags": ["Files"],
+                "summary": "Modifica el nombre de un archivo",
+                "parameters": [{
+                        "name": "file",
+                        "in": "query",
+                        "required": true,
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    {
+                        "name": "newnamefile",
+                        "in": "body",
+                        "required": true,
+                        "type": "string",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "newName": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": ["application/json", "multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "consumes": ["multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "responses": {
+                    "200": {
+                        "description": "Se renombro el archivo con exito"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/files/uploadfile": {
+            "post": {
+                "tags": ["Files"],
+                "summary": "Sube un archivo",
+                "parameters": [{
+                    "name": "file",
+                    "in": "query",
+                    "required": true,
+                    "type": "string",
+                    "format": "binary"
+                }],
+                "produces": ["multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "consumes": ["multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "responses": {
+                    "200": {
+                        "description": "Se subio el archivo con exito"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/images/by": {
+            "post": {
+                "tags": ["Images"],
+                "summary": "Busco una imagen por filtro",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "type": "string"
+                    },
+                    {
+                        "name": "orderby",
+                        "in": "query",
+                        "type": "string"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer"
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Se encontraron las imagenes"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        },
+        "/images/uploadtobucket": {
+            "post": {
+                "tags": ["Images"],
+                "summary": "Sube una Imagen",
+                "produces": ["multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "consumes": ["multipart/form-data", "application/x-www-form-urlencoded", "binary"],
+                "responses": {
+                    "200": {
+                        "description": "Se subio la imagen con exito"
+                    },
+                    "400": {
+                        "description": "Error"
+                    }
+                }
+            }
+        }
+    }
+}
