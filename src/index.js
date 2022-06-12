@@ -3,6 +3,9 @@ const bodyParser = require('body-parser')
 const path = require('path');
 const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
+const mongoose = require("mongoose");
+
+require("dotenv").config();
 
 swaggerDocument = require('../swagger.json');
 
@@ -12,6 +15,15 @@ const port = 3000
 // Settings
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Conexion DB
+mongoose.Promise = global.Promise;
+mongoose
+  .connect(process.env.DB_URI, {
+    useNewUrlParser: true,
+  })
+  .then((db) => console.log("Base de datos conectada"))
+  .catch((error) => console.error(error));
 
 // Public
 fs.mkdir(path.join(__dirname, '/public/uploads'), { recursive: true }, (err) => {
